@@ -1,0 +1,225 @@
+import React, { useState, useEffect } from "react";
+import toast from "react-hot-toast";
+import { Icons } from "../../../components/icons/IconSystem";
+import api from "../../../utils/api";
+import { formatTime } from "../../../utils/dateFormatter";
+import DataTable from "../components/DataTable";
+import Button from "../../../components/ui/Button";
+import Select from "../../../components/ui/Select";
+
+const Orders = () => {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeFilters, setActiveFilters] = useState({});
+
+  const fetchOrders = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await api.get("/orders");
+      setOrders(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.error("Failed to fetch orders:", err);
+      setError(
+        err.response?.data?.message || err.message || "Failed to load orders.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+    const interval = setInterval(fetchOrders, 15000); // Auto-refresh every 15s
+    return () => clearInterval(interval);
+  }, []);
+
+  const updateStatus = async (id, status) => {
+    try {
+      await api.patch(`/orders/${id}/status`, { status });
+      if (status === "completed") {
+        setOrders(orders.filter((o) => o.id !== id));
+      } else {
+        setOrders(orders.map((o) => (o.id === id ? { ...o, status } : o)));
+      }
+      toast.success("Order status updated");
+    } catch (err) {
+      console.error("Failed to update order status:", err);
+      toast.error(err.response?.data?.message || "Failed to update status");
+    }
+  };
+
+  const columns = [
+    {
+      header: "Order ID",
+      key: "id",
+      render: (order) => (
+        <strong style={{ color: "var(--brand-primary)" }}>#{order.id}</strong>
+      ),
+    },
+    {
+      header: "Customer",
+      key: "customer",
+      render: (order) => <span>{order.customer?.name || "Guest"}</span>,
+    },
+    {
+      header: "Status",
+      key: "status",
+      render: (order) => (
+        <span
+          className={`status-pill-modern status-modern-${order.status?.toLowerCase()}`}
+        >
+          {order.status}
+        </span>
+      ),
+    },
+    {
+      header: "Items",
+      key: "items",
+      render: (order) => (
+        <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)" }}>
+          {order.items && Array.isArray(order.items)
+            ? order.items.map((item, idx) => (
+                <div key={idx}>
+                  {item.quantity}x {item.itemName}
+                </div>
+              ))
+            : "No items data"}
+        </div>
+      ),
+    },
+    {
+      header: "Location",
+      key: "tableNumber",
+      render: (order) => (
+        <span style={{ fontWeight: 600 }}>
+          {order.orderType === "TAKEAWAY"
+            ? "Parcel"
+            : `Table ${order.tableNumber || order.Table?.tableNumber || "N/A"}`}
+        </span>
+      ),
+    },
+    {
+      header: "Amount",
+      key: "totalAmount",
+      render: (order) => (
+        <span style={{ fontWeight: 700, color: "var(--brand-primary)" }}>
+          {new Intl.NumberFormat("en-IN", {
+            style: "currency",
+            currency: "INR",
+          }).format(Number(order.totalAmount))}
+        </span>
+      ),
+    },
+    {
+      header: "Time",
+      key: "createdAt",
+      render: (order) => (
+        <span style={{ color: "var(--text-muted)" }}>
+          {formatTime(order.createdAt)}
+        </span>
+      ),
+    },
+    {
+      header: "Update",
+      key: "update",
+      render: (order) => (
+        <Select
+          value={order.status}
+          onChange={(value) => updateStatus(order.id, value)}
+          options={[
+            { label: "Pending", value: "pending" },
+            { label: "Preparing", value: "preparing" },
+            { label: "Completed", value: "completed" },
+          ]}
+          style={{ width: "120px" }}
+        />
+      ),
+    },
+  ];
+
+  const filterConfig = [
+    {
+      key: "status",
+      label: "All Statuses",
+      options: [
+        { label: "Pending", value: "pending" },
+        { label: "Preparing", value: "preparing" },
+        { label: "Completed", value: "completed" },
+        { label: "Cancelled", value: "cancelled" },
+      ],
+    },
+    {
+      key: "orderType",
+      label: "All Types",
+      options: [
+        { label: "Dine In", value: "DINE_IN" },
+        { label: "Takeaway", value: "TAKEAWAY" },
+      ],
+    },
+  ];
+
+  const filteredOrders = orders.filter((order) => {
+    const matchesSearch =
+      order.id.toString().includes(searchTerm) ||
+      (order.customer?.name || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      !activeFilters.status || order.status === activeFilters.status;
+    const matchesType =
+      !activeFilters.orderType || order.orderType === activeFilters.orderType;
+
+    return matchesSearch && matchesStatus && matchesType;
+  });
+
+  return (
+    <div className="management-page">
+      <header className="admin-page-header">
+        <h1 className="admin-page-title">Active Orders</h1>
+        <p className="admin-page-subtitle">
+          Manage incoming kitchen orders and track their preparation status.
+        </p>
+        <div className="admin-header-divider"></div>
+      </header>
+
+      {loading ? (
+        <div style={{ padding: "3rem", textAlign: "center" }}>
+          <div className="chef-spinner" style={{ margin: "0 auto 1rem" }}></div>
+          <p style={{ color: "var(--text-muted)" }}>
+            Fetching active orders...
+          </p>
+        </div>
+      ) : error ? (
+        <div className="error-state">
+          <p>
+            <span>
+              <Icons.alertCircle size={16} className="inline-icon" />
+            </span>{" "}
+            {error}
+          </p>
+          <Button variant="primary" onClick={fetchOrders}>
+            Retry
+          </Button>
+        </div>
+      ) : (
+        <DataTable
+          columns={columns}
+          data={filteredOrders}
+          searchValue={searchTerm}
+          onSearchChange={setSearchTerm}
+          filters={filterConfig}
+          activeFilters={activeFilters}
+          onFilterChange={(key, value) =>
+            setActiveFilters({ ...activeFilters, [key]: value })
+          }
+          searchPlaceholder="Search order ID or customer name..."
+        />
+      )}
+    </div>
+  );
+};
+
+export default Orders;

@@ -1,0 +1,220 @@
+import React, { useState, useEffect } from "react";
+import { Icons } from "../../../components/icons/IconSystem";
+import api from "../../../utils/api";
+import { formatDate } from "../../../utils/dateFormatter";
+import DataTable from "../components/DataTable";
+import Button from "../../../components/ui/Button";
+
+const Payments = () => {
+  const [payments, setPayments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeFilters, setActiveFilters] = useState({});
+
+  const fetchPayments = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await api.get("/admin/payments");
+      setPayments(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.error("Failed to fetch payments:", err);
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Failed to load payments.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPayments();
+  }, []);
+
+  const columns = [
+    {
+      header: "Type",
+      key: "type",
+      render: (payment) => (
+        <span
+          className={`status-pill-modern ${payment.type === "Booking" ? "status-modern-pending" : "status-modern-confirmed"}`}
+          style={{ fontSize: "0.7rem" }}
+        >
+          {payment.type}
+        </span>
+      ),
+    },
+    {
+      header: "Customer",
+      key: "customerName",
+      render: (payment) => (
+        <strong style={{ color: "var(--text-primary)" }}>
+          {payment.customerName}
+        </strong>
+      ),
+    },
+    {
+      header: "Ref ID",
+      key: "id",
+      render: (payment) => (
+        <span style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
+          #{payment.id}
+        </span>
+      ),
+    },
+    {
+      header: "Amount",
+      key: "amount",
+      render: (payment) => (
+        <span
+          style={{
+            fontWeight: 800,
+            color: "var(--brand-primary)",
+            fontSize: "1.05rem",
+          }}
+        >
+          {new Intl.NumberFormat("en-IN", {
+            style: "currency",
+            currency: "INR",
+          }).format(payment.amount)}
+        </span>
+      ),
+    },
+    {
+      header: "Payment ID",
+      key: "paymentId",
+      render: (payment) => (
+        <code
+          style={{
+            background: "var(--bg-secondary)",
+            padding: "6px 10px",
+            borderRadius: "8px",
+            fontSize: "0.8rem",
+            color: "var(--text-muted)",
+            border: "1px solid var(--border-color)",
+          }}
+        >
+          {payment.paymentId || "N/A"}
+        </code>
+      ),
+    },
+    {
+      header: "Method",
+      key: "method",
+      render: (payment) => (
+        <span style={{ fontSize: "0.85rem", color: "var(--text-secondary)" }}>
+          {payment.method}
+        </span>
+      ),
+    },
+    {
+      header: "Status",
+      key: "paymentStatus",
+      render: (payment) => (
+        <span
+          className={`status-pill-modern status-modern-${payment.paymentStatus === "paid" ? "confirmed" : "cancelled"}`}
+          style={{ textTransform: "capitalize" }}
+        >
+          <span
+            style={{
+              width: "6px",
+              height: "6px",
+              borderRadius: "50%",
+              background: "currentColor",
+              marginRight: "8px",
+            }}
+          ></span>
+          {payment.paymentStatus}
+        </span>
+      ),
+    },
+    {
+      header: "Date",
+      key: "updatedAt",
+      render: (payment) => (
+        <span style={{ color: "var(--text-muted)", fontWeight: 500 }}>
+          {formatDate(payment.updatedAt)}
+        </span>
+      ),
+    },
+  ];
+
+  const filterConfig = [
+    {
+      key: "paymentStatus",
+      label: "All Statuses",
+      options: [
+        { label: "Paid", value: "paid" },
+        { label: "Pending", value: "pending" },
+        { label: "Failed", value: "failed" },
+      ],
+    },
+    {
+      key: "type",
+      label: "All Types",
+      options: [
+        { label: "Order", value: "Order" },
+        { label: "Booking", value: "Booking" },
+      ],
+    },
+  ];
+
+  const filteredPayments = payments.filter((p) => {
+    const matchesSearch =
+      p.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (p.paymentId || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      p.id.toString().includes(searchTerm);
+    const matchesStatus =
+      !activeFilters.paymentStatus ||
+      p.paymentStatus === activeFilters.paymentStatus;
+    const matchesType = !activeFilters.type || p.type === activeFilters.type;
+
+    return matchesSearch && matchesStatus && matchesType;
+  });
+
+  return (
+    <div className="management-page">
+      <header className="admin-page-header">
+        <h1 className="admin-page-title">Transaction History</h1>
+        <p className="admin-page-subtitle">
+          Monitor all financial transactions and payment statuses.
+        </p>
+        <div className="admin-header-divider"></div>
+      </header>
+
+      {loading ? (
+        <div style={{ padding: "3rem", textAlign: "center" }}>
+          <div className="chef-spinner" style={{ margin: "0 auto 1rem" }}></div>
+          <p style={{ color: "var(--text-muted)" }}>Loading payments...</p>
+        </div>
+      ) : error ? (
+        <div className="error-state">
+          <p>
+            <Icons.error size={16} className="inline-icon" /> {error}
+          </p>
+          <Button variant="primary" onClick={fetchPayments}>
+            Retry
+          </Button>
+        </div>
+      ) : (
+        <DataTable
+          columns={columns}
+          data={filteredPayments}
+          searchValue={searchTerm}
+          onSearchChange={setSearchTerm}
+          filters={filterConfig}
+          activeFilters={activeFilters}
+          onFilterChange={(key, value) =>
+            setActiveFilters({ ...activeFilters, [key]: value })
+          }
+          searchPlaceholder="Search customer or payment ID..."
+        />
+      )}
+    </div>
+  );
+};
+
+export default Payments;

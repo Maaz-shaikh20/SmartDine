@@ -1,0 +1,704 @@
+/* Landing Page Styles */
+.landing-page {
+  min-height: 100vh;
+  background: var(--bg-hero);
+}
+
+/* Note: .header and .header-content styles are in App.css (global navbar) */
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+/* Hero Section */
+
+.hero {
+  padding: 60px 2rem;
+  min-height: 65vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-hero-hardcoded);
+}
+
+.hero-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-text-content {
+  text-align: left;
+}
+
+.hero-text-content h2 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.hero-text-content p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  color: var(--text-secondary);
+}
+
+.hero-side-image {
+  width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  object-fit: cover;
+  height: 400px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.cta-btn {
+  background: var(--brand-primary);
+  color: var(--btn-text);
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  border-radius: 28px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.cta-btn:hover {
+  background: var(--brand-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Restaurant Menu Section */
+
+.menu-section {
+  padding: 3rem 2rem;
+  background: var(--card-bg);
+  margin: 4rem auto;
+  max-width: 1200px;
+  border-radius: 20px;
+  box-shadow: var(--card-shadow);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.menu-section h2 {
+  color: var(--brand-primary);
+  font-size: 2.8rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1.5px;
+}
+
+.menu-subtitle {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.menu-item {
+  background: var(--card-bg-alt);
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid var(--card-border);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  min-height: 180px;
+  padding: 1rem;
+}
+
+.view-all-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 3.5rem;
+}
+
+.view-all-btn {
+  background: var(--brand-primary);
+  color: var(--btn-text);
+  border: none;
+  padding: 0.8rem 2.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--card-shadow);
+}
+
+.view-all-btn:hover {
+  background: var(--brand-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+.menu-item-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e8d4c0 0%, #f5e6d3 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.menu-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.menu-item:hover .menu-item-image img {
+  transform: scale(1.1);
+}
+
+.menu-item-image.image-loading-failed {
+  background: linear-gradient(135deg, #d4af37 0%, #f4e4c1 100%);
+}
+
+.menu-item-image.image-loading-failed::after {
+  content: '';
+}
+
+.menu-item h3 {
+  color: var(--brand-primary);
+  font-size: 1.2rem;
+  margin: 1rem;
+  font-weight: 700;
+  min-height: 20px;
+}
+
+.menu-item .description {
+  color: var(--text-muted);
+  font-size: 14px;
+  min-height: 36px;
+  margin: 0.5rem 1rem;
+  font-style: italic;
+  flex-grow: 1;
+}
+
+.menu-item .price {
+  color: var(--brand-primary);
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin: 1rem;
+  border-top: 1px solid var(--card-border);
+  padding-top: 0.5rem;
+}
+
+.menu-item:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--accent-secondary);
+  background: var(--card-bg);
+}
+
+/* Features Section */
+
+.features-mini-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.mini-feature {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.mini-icon {
+  color: var(--brand-secondary);
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.mini-feature h4 {
+  margin: 0 0 4px;
+  font-size: 0.95rem;
+  color: white;
+  font-weight: 700;
+}
+
+.mini-feature p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.4;
+}
+
+.cta-btn.secondary {
+  background: var(--brand-primary);
+  color: var(--btn-text);
+  border: none;
+}
+
+.cta-btn.secondary:hover {
+  background: var(--brand-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Book Table Section */
+.book-table-section {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 4rem auto;
+  background: var(--card-bg);
+  border-radius: 20px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--card-border);
+}
+
+.book-table-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.book-table-image img {
+  width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  height: 380px;
+  object-fit: cover;
+}
+
+.book-table-content h2 {
+  font-size: 2.5rem;
+  color: var(--brand-primary);
+  margin-bottom: 1.5rem;
+}
+
+.book-table-content p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+/* Restaurant Showcase Section */
+
+.showcase {
+  padding: 3rem 2rem;
+  max-width: 1200px;
+  margin: 4rem auto;
+  background: var(--bg-section);
+  border-radius: 15px;
+  box-shadow: var(--card-shadow);
+  color: white;
+}
+
+.showcase-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.showcase-text h2 {
+  font-size: 2.2rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.showcase-text p {
+  font-size: 1.1rem;
+  color: white;
+  line-height: 1.8;
+  opacity: 0.9;
+}
+
+.showcase-features {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+}
+
+.showcase-features li {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.showcase-image {
+  width: 100%;
+  height: 500px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.showcase-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+/* Restaurant Info Section (Visit Us) */
+
+.restaurant-info-section {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 4rem auto;
+  background: var(--card-bg);
+  border-radius: 20px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--card-border);
+  text-align: center;
+}
+
+.restaurant-info-section h2 {
+  font-size: 2.5rem;
+  color: var(--brand-primary);
+  margin-bottom: 2.5rem;
+}
+
+.info-cards-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.info-card {
+  padding: 2rem;
+  background: var(--card-bg-alt);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--card-border);
+  transition: transform 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.info-icon {
+  margin-bottom: 1rem;
+}
+
+.info-card h3 {
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+  color: var(--text-primary);
+}
+
+.info-card p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .info-cards-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Footer */
+
+.footer {
+  background: var(--bg-footer-hardcoded);
+  color: white;
+  text-align: center;
+  padding: 4rem 2rem 2rem;
+  margin: 4rem auto 2rem auto;
+  max-width: 1200px;
+  border-radius: 20px;
+  box-shadow: var(--card-shadow);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-title {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #e8d4c0;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.footer-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e8d4c0;
+  padding: 8px 18px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+}
+
+.footer-btn:hover {
+  background: rgba(166, 123, 91, 0.15);
+  border-color: #A67B5B;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(166, 123, 91, 0.25);
+}
+
+body[data-theme="light"] .footer-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.copyright {
+  font-size: 0.85rem;
+  opacity: 0.6;
+  margin-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 1.5rem;
+}
+
+/* Responsive */
+
+@media (max-width:992px) {
+  .hero-grid-container,
+  .book-table-grid {
+    gap: 30px;
+  }
+}
+
+@media (max-width:768px) {
+  .hero-grid-container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero-text-content {
+    text-align: center;
+    order: 1;
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+
+  /* Image below text in Hero */
+  .hero-image-wrapper {
+    order: 2;
+  }
+
+  .hero-side-image {
+    height: 300px;
+  }
+
+  .nav-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .nav-btn {
+    width: 100%;
+  }
+
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .showcase-content {
+    grid-template-columns: 1fr;
+  }
+
+  .book-table-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  /* Image above text in Book Table Section */
+  .book-table-image {
+    order: 1;
+  }
+  .book-table-content {
+    order: 2;
+  }
+  
+  .book-table-image img {
+    height: 300px;
+  }
+}
+
+@media (max-width: 576px) {
+  .menu-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .menu-section h2 {
+    font-size: 2rem;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   MODERN ANIMATIONS & EFFECTS
+   ═══════════════════════════════════════════ */
+
+/* 1. Hero Staggered Entrance */
+.hero-text-content [class^="fade-up-"] {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.hero-loaded .fade-up-1 {
+  animation: fadeUpStagger 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.1s forwards;
+}
+.hero-loaded .fade-up-2 {
+  animation: fadeUpStagger 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.3s forwards;
+}
+.hero-loaded .fade-up-3 {
+  animation: fadeUpStagger 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.5s forwards;
+}
+.hero-loaded .fade-up-4 {
+  animation: fadeUpStagger 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.7s forwards;
+}
+
+@keyframes fadeUpStagger {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 3. Typewriter Effect */
+.typewriter {
+  display: inline-block;
+  min-height: 1.6em;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+  font-weight: bold;
+  opacity: 0.8;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* 5. Scroll Reveal Effect */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 6. Button Soft Glow over default */
+.cta-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: skewX(-20deg);
+  transition: unset;
+}
+
+.cta-btn:hover::after {
+  animation: btnSweep 0.6s ease-out;
+}
+
+.cta-btn:hover {
+  transform: scale(1.03) translateY(-2px);
+  box-shadow: 0 8px 25px var(--brand-primary-light);
+}
+
+@keyframes btnSweep {
+  100% { left: 200%; }
+}
+
+/* 7. Icon & Image Micro-animations */
+.mini-feature {
+  cursor: pointer;
+}
+
+.mini-icon {
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.mini-feature:hover .mini-icon {
+  transform: scale(1.2) rotate(-10deg);
+}
+
+.menu-item-image img, 
+.hero-side-image, 
+.showcase-image img {
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.menu-item:hover .menu-item-image img,
+.hero-image-wrapper:hover .hero-side-image {
+  transform: scale(1.04);
+}
